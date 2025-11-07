@@ -107,8 +107,11 @@ Contexto do estudante:
           <Brain className="w-6 h-6 text-vega-text" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-vega-text">GPT - Direito Administrativo</h1>
-          <p className="text-vega-text">Seu assistente de estudos especializado</p>
+          <h2 className="text-2xl font-bold text-rose-500 flex items-center gap-2">
+            <Brain className="w-6 h-6" />
+            GPT - Direito Administrativo
+          </h2>
+          <p className="text-white/70">Seu assistente de estudos especializado</p>
         </div>
       </div>
 

@@ -53,7 +53,7 @@ export function VegaOrientador() {
     setPlano(porDisciplina);
     
     // Salva no StudyPlanContext para compartilhar com outros GPTs
-    const disciplinaDaSemana = cronograma.length > 0 ? cronograma[0].foco : disciplinas[0] || "Não definida";
+    const disciplinaDaSemana = plano.cronograma.length > 0 ? plano.cronograma[0].foco : disciplinas[0] || "Não definida";
     
     setStudyPlan({
       userName: userEmail?.split('@')[0] || "Estudante",
