@@ -4,6 +4,7 @@ import { LandingPage } from "./components/LandingPage";
 import { VegaOrientador } from "./components/SiriusOrientador";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { AuthProvider, useAuth } from "./AuthContext";
+import { StudyPlanProvider } from "./StudyPlanContext";
 import { LoginModal } from "./components/LoginModal";
 
 function AppInner() {
@@ -92,7 +93,9 @@ function AppInner() {
 export function App() {
   return (
     <AuthProvider>
-      <AppInner />
+      <StudyPlanProvider>
+        <AppInner />
+      </StudyPlanProvider>
     </AuthProvider>
   );
 }

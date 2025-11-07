@@ -3,7 +3,8 @@ import { chatRag } from "../services/chat";
 import type { AgentId } from "../agents";
 import { agentes } from "../agents";
 import { usePlano } from "../PlanoContext";
-import { Brain, Send, RotateCcw, HelpCircle } from "lucide-react";
+import { useStudyPlan } from "../StudyPlanContext";
+import { Brain, Send, RotateCcw, HelpCircle, Calendar, Clock, BookOpen } from "lucide-react";
 import { RichMessage } from './RichMessage';
 
 export function Chatbot() {
@@ -14,6 +15,7 @@ export function Chatbot() {
   const [suggestions, setSuggestions] = useState([] as string[]);
 
   const { getPlanoDaDisciplina } = usePlano();
+  const { studyPlan, hasActivePlan } = useStudyPlan();
 
   async function handleSend(text?: string) {
     const content = (text ?? input).trim();
@@ -29,7 +31,18 @@ export function Chatbot() {
   
     const agente = agentes[agentId];
     const plano = getPlanoDaDisciplina(agente.disciplina);
-    const focoDaSemana = plano?.[0]?.foco ?? content;
+    
+    // Usa informações do StudyPlanContext se disponível
+    const focoDaSemana = studyPlan?.disciplinaDaSemana ?? plano?.[0]?.foco ?? content;
+    const contextoPersonalizado = studyPlan ? `
+Contexto do estudante:
+- Nome: ${studyPlan.userName}
+- Tempo de estudo diário: ${studyPlan.tempoEstudoDiario}h
+- Disciplina da semana: ${studyPlan.disciplinaDaSemana}
+- Método de estudo: ${studyPlan.metodoEstudo}
+- Concurso alvo: ${studyPlan.concursoAlvo}
+- Cargo alvo: ${studyPlan.cargoAlvo}
+` : "";
   
     console.log("📚 Histórico atual:", history.length, "mensagens");
     console.log("📝 Enviando para chatRag:", {
@@ -40,8 +53,8 @@ export function Chatbot() {
 
     const r = await chatRag({
       agentId,
-      message: content,
-      concurso: "Policial Legislativo Federal - Câmara dos Deputados",
+      message: contextoPersonalizado + content,
+      concurso: studyPlan?.concursoAlvo ?? "Policial Legislativo Federal - Câmara dos Deputados",
       banca: "CESPE",
       disciplina: agente.disciplina,
       assunto: focoDaSemana,
@@ -98,6 +111,32 @@ export function Chatbot() {
           <p className="text-vega-text">Seu assistente de estudos especializado</p>
         </div>
       </div>
+
+      {/* Card do Plano Ativo */}
+      {hasActivePlan && studyPlan && (
+        <div className="bg-gradient-to-r from-blue-900/50 via-purple-900/50 to-pink-900/50 border border-blue-500/30 rounded-lg p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <BookOpen className="w-5 h-5 text-blue-300 mt-1" />
+            <div className="flex-1">
+              <h3 className="text-blue-100 font-medium mb-2">Plano de Estudos Ativo</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-300" />
+                  <span className="text-blue-200">Disciplina: <strong>{studyPlan.disciplinaDaSemana}</strong></span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-purple-300" />
+                  <span className="text-purple-200">Tempo: <strong>{studyPlan.tempoEstudoDiario}h/dia</strong></span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-pink-300" />
+                  <span className="text-pink-200">Método: <strong>{studyPlan.metodoEstudo}</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       {/* Seção do Chat */}
