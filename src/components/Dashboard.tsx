@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Brain, ArrowLeft, BookOpen, MessageSquare, FileText, BarChart3, ExternalLink, Sparkles, Wrench } from 'lucide-react';
+import { Brain, ArrowLeft, BookOpen, MessageSquare, FileText, BarChart3, ExternalLink, Sparkles } from 'lucide-react';
 import { Chatbot } from './Chatbot';
-import { SiriusOrientador } from './SiriusOrientador';
-import { Ferramentas } from './Ferramentas';
+import { VegaOrientador } from './SiriusOrientador';
 
-type ViewType = 'concursos' | 'cargos' | 'disciplinas' | 'gpt' | 'orientador' | 'ferramentas';
+type ViewType = 'concursos' | 'cargos' | 'disciplinas' | 'gpt' | 'orientador';
 
 interface BreadcrumbItem {
   label: string;
@@ -15,27 +15,34 @@ interface BreadcrumbItem {
 }
 
 export function Dashboard() {
-  const [currentView, setCurrentView] = useState<ViewType>('concursos');
-  const [selectedConcurso, setSelectedConcurso] = useState<string>('');
-  const [selectedCargo, setSelectedCargo] = useState<string>('');
-  const [selectedDisciplina, setSelectedDisciplina] = useState<string>('');
-  const [breadcrumb, setBreadcrumb] = useState<BreadcrumbItem[]>([
+  const [currentView, setCurrentView] = useState('concursos');
+  const { isAuthenticated } = useAuth();
+  const [selectedConcurso, setSelectedConcurso] = useState('');
+  const [selectedCargo, setSelectedCargo] = useState('');
+  const [selectedDisciplina, setSelectedDisciplina] = useState('');
+  const [breadcrumb, setBreadcrumb] = useState([
     { label: 'Concursos', view: 'concursos' }
   ]);
 
-  const concursos = [
+  const concursos: Array<{
+    id: string;
+    nome: string;
+    descricao: string;
+    status: string;
+    cargos: string[];
+  }> = [
     {
       id: 'camara-deputados',
       nome: 'Câmara dos Deputados',
-      descricao: 'Concurso para cargos do Poder Legislativo Federal',
+      descricao: 'Concurso para Policial Legislativo Federal',
       status: 'Ativo',
-      cargos: ['Policial Legislativo', 'Analista Legislativo', 'Técnico Legislativo']
+      cargos: ['Policial Legislativo Federal']
     }
   ];
 
-  const disciplinas = {
-    'Policial Legislativo': [
-      { nome: 'Língua Portuguesa', topicos: 15, exercicios: 2340 },
+  const disciplinas: Record<string, Array<{ nome: string; topicos: number; exercicios: number }>> = {
+    'Policial Legislativo Federal': [
+      { nome: 'Língua Portuguesa', topicos: 17, exercicios: 2340 },
       { nome: 'Raciocínio Lógico-Matemático', topicos: 12, exercicios: 1890 },
       { nome: 'Direito Constitucional', topicos: 18, exercicios: 3120 },
       { nome: 'Direito Administrativo', topicos: 22, exercicios: 2780 },
@@ -56,7 +63,7 @@ export function Dashboard() {
     ]
   };
 
-  const gptFeatures = [
+  const gptFeatures: Array<{ icon: any; label: string; description: string }> = [
     { icon: MessageSquare, label: 'Chat Interativo', description: 'Tire dúvidas em tempo real' },
     { icon: FileText, label: 'Exercícios', description: 'Milhares de questões comentadas' },
     { icon: BookOpen, label: 'Resumos', description: 'Construção automática de resumos' },
@@ -67,11 +74,11 @@ export function Dashboard() {
   const navigateTo = (view: ViewType, data?: any) => {
     const newBreadcrumb = [...breadcrumb];
     
-    switch (view) {
-      case 'orientador':
-        setCurrentView('orientador');
-        newBreadcrumb.push({ label: 'GPT Orientador Sirius', view: 'orientador' });
-        break;
+        switch (view) {
+          case 'orientador':
+            setCurrentView('orientador');
+            newBreadcrumb.push({ label: 'GPT Orientador Vega', view: 'orientador' });
+            break;
       case 'cargos':
         setSelectedConcurso(data.id);
         setCurrentView('cargos');
@@ -115,10 +122,10 @@ export function Dashboard() {
     <div className="flex items-center space-x-2 mb-6 text-sm">
       {breadcrumb.map((item, index) => (
         <div key={index} className="flex items-center">
-          {index > 0 && <span className="text-slate-400 mx-2">/</span>}
+          {index > 0 && <span className="text-vega-text-2 mx-2">/</span>}
           <button
             onClick={() => navigateBack(item.view)}
-            className="text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-vega-neon hover:text-vega-text transition-colors"
           >
             {item.label}
           </button>
@@ -130,92 +137,60 @@ export function Dashboard() {
   const renderConcursos = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-3xl text-white mb-2">Seja Bem-vindo ao Sirius GPT Concursos!</h2>
-        <p className="text-blue-200">Configure seu plano de estudos ou explore diretamente as disciplinas</p>
+        <h2 className="text-3xl text-vega-text mb-2">Seja Bem-vindo ao Vega GPT Concursos!</h2>
+        <p className="text-vega-text-2">Configure seu plano de estudos ou explore diretamente as disciplinas</p>
       </div>
 
-      {/* GPT Orientador Card */}
-      <Card className="bg-gradient-to-br from-blue-950/70 to-purple-950/70 border-cyan-400/40 backdrop-blur-sm mb-6">
-        <CardHeader>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400 rounded-full flex items-center justify-center">
-                <div className="w-14 h-14 bg-gradient-to-br from-slate-900 to-blue-950 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-cyan-300" />
+          {/* GPT Orientador Card */}
+          <Card className="vega-card mb-6">
+            <CardHeader>
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-vega-cta rounded-full flex items-center justify-center shadow-vega-cta">
+                    <div className="w-14 h-14 bg-vega-bg rounded-full flex items-center justify-center">
+                      <Sparkles className="w-8 h-8 text-vega-text" />
+                    </div>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-vega-neon rounded-full animate-pulse" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl text-vega-neon">
+                    🌟 GPT Orientador Vega
+                  </CardTitle>
+                  <CardDescription className="text-vega-text-2 text-lg">
+                    Configure seu plano personalizado de estudos
+                  </CardDescription>
                 </div>
               </div>
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-cyan-400 rounded-full animate-pulse" />
-            </div>
-            <div>
-              <CardTitle className="text-2xl bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                🌟 GPT Orientador Sirius
-              </CardTitle>
-              <CardDescription className="text-blue-200 text-lg">
-                Configure seu plano personalizado de estudos
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-blue-100 mb-4">
-            Comece criando um plano de estudos personalizado que será usado por todos os GPTs especializados.
-            O Orientador Sirius analisa seu perfil e tempo disponível para otimizar sua jornada de aprovação.
-          </p>
-          <Button 
-            onClick={() => navigateTo('orientador')}
-            className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 py-3"
-          >
-            <Sparkles className="w-5 h-5 mr-2" />
-            Acessar GPT Orientador
-          </Button>
-        </CardContent>
-      </Card>
+            </CardHeader>
+            <CardContent>
+              <p className="text-vega-text-2 mb-4">
+                Comece criando um plano de estudos personalizado que será usado por todos os GPTs especializados.
+                O Orientador Vega analisa seu perfil e tempo disponível para otimizar sua jornada de aprovação.
+              </p>
+              <Button
+                onClick={() => navigateTo('orientador')}
+                className="w-full vega-btn py-3"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Acessar GPT Orientador
+              </Button>
+            </CardContent>
+          </Card>
 
-      <Card className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-purple-500/30 mb-6">
-        <CardHeader>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center">
-                <Wrench className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div>
-              <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-pink-400 bg-clip-text text-transparent">
-                🔧 Ferramentas de Estudo
-              </CardTitle>
-              <CardDescription className="text-purple-200 text-lg">
-                Potencialize seus estudos com ferramentas especializadas
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-purple-100 mb-4">
-            Acesse consulta de editais, busca de jurisprudência, simuladores de prova e análise de desempenho.
-            Todas integradas com RAG e governança de IA.
-          </p>
-          <Button 
-            onClick={() => navigateTo('ferramentas')}
-            className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 py-3"
-          >
-            <Wrench className="w-5 h-5 mr-2" />
-            Acessar Ferramentas
-          </Button>
-        </CardContent>
-      </Card>
       
       <div className="grid gap-6">
         {concursos.map((concurso) => (
-          <Card key={concurso.id} className="bg-slate-900/50 border-blue-800/30 hover:bg-slate-900/70 transition-all cursor-pointer">
+          <Card key={concurso.id} className="vega-card hover:brightness-110 transition-all cursor-pointer">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
-                  <CardTitle className="text-white text-xl">{concurso.nome}</CardTitle>
-                  <CardDescription className="text-blue-200 mt-2">
+                  <CardTitle className="text-vega-text text-xl">{concurso.nome}</CardTitle>
+                  <CardDescription className="text-vega-text-2 mt-2">
                     {concurso.descricao}
                   </CardDescription>
                 </div>
-                <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/50">
+                <Badge className="bg-vega-neon/20 text-vega-neon border border-vega-neon/50">
                   {concurso.status}
                 </Badge>
               </div>
@@ -223,14 +198,14 @@ export function Dashboard() {
             <CardContent>
               <div className="flex flex-wrap gap-2 mb-4">
                 {concurso.cargos.map((cargo) => (
-                  <Badge key={cargo} variant="secondary" className="bg-blue-800/30 text-blue-200 border-blue-600/30">
+                  <Badge key={cargo} variant="secondary" className="bg-vega-bg/50 text-vega-text-2 border-vega-border">
                     {cargo}
                   </Badge>
                 ))}
               </div>
               <Button 
                 onClick={() => navigateTo('cargos', concurso)}
-                className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600"
+                className="w-full vega-btn"
               >
                 Explorar Concurso
               </Button>
@@ -246,23 +221,23 @@ export function Dashboard() {
     return (
       <div className="space-y-6">
         <div className="text-center mb-8">
-          <h2 className="text-3xl text-white mb-2">Escolha seu Cargo</h2>
-          <p className="text-slate-300">Selecione o cargo específico para ver as disciplinas</p>
+          <h2 className="text-3xl text-vega-text mb-2">Escolha seu Cargo</h2>
+          <p className="text-vega-text-2">Selecione o cargo específico para ver as disciplinas</p>
         </div>
         
         <div className="grid gap-4">
           {concurso?.cargos.map((cargo) => (
-            <Card key={cargo} className="bg-slate-900/50 border-blue-800/30 hover:bg-slate-900/70 transition-all cursor-pointer">
+            <Card key={cargo} className="vega-card hover:brightness-110 transition-all cursor-pointer">
               <CardHeader>
-                <CardTitle className="text-white">{cargo}</CardTitle>
-                <CardDescription className="text-blue-200">
+                <CardTitle className="text-vega-text">{cargo}</CardTitle>
+                <CardDescription className="text-vega-text-2">
                   {disciplinas[cargo as keyof typeof disciplinas]?.length || 0} disciplinas disponíveis
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Button 
                   onClick={() => navigateTo('disciplinas', cargo)}
-                  className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600"
+                  className="w-full vega-btn"
                 >
                   Ver Disciplinas
                 </Button>
@@ -280,29 +255,29 @@ export function Dashboard() {
     return (
       <div className="space-y-6">
         <div className="text-center mb-8">
-          <h2 className="text-3xl text-white mb-2">GPTs por Disciplina</h2>
-          <p className="text-slate-300">Cada GPT é especializado em uma disciplina específica</p>
+          <h2 className="text-3xl text-vega-text mb-2">GPTs por Disciplina</h2>
+          <p className="text-vega-text-2">Cada GPT é especializado em uma disciplina específica</p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {disciplinasList.map((disciplina, index) => (
-            <Card key={index} className="bg-slate-900/50 border-blue-800/30 hover:bg-slate-900/70 transition-all cursor-pointer">
+            <Card key={index} className="vega-card hover:brightness-110 transition-all cursor-pointer">
               <CardHeader>
                 <div className="flex items-center space-x-3 mb-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                    <Brain className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-vega-cta rounded-lg flex items-center justify-center shadow-vega-cta">
+                    <Brain className="w-4 h-4 text-vega-text" />
                   </div>
-                  <CardTitle className="text-white text-lg">{disciplina.nome}</CardTitle>
+                  <CardTitle className="text-vega-text text-lg">{disciplina.nome}</CardTitle>
                 </div>
-                <div className="flex space-x-4 text-sm text-blue-300">
+                <div className="flex space-x-4 text-sm text-vega-neon">
                   <span>{disciplina.topicos} tópicos</span>
                   <span>{disciplina.exercicios} exercícios</span>
                 </div>
               </CardHeader>
               <CardContent>
                 <Button 
-                  onClick={() => navigateTo('gpt', disciplina)}
-                  className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600"
+                  onClick={() => isAuthenticated ? navigateTo('gpt', disciplina) : alert('Faça login para acessar os GPTs.')}
+                  className="w-full vega-btn"
                 >
                   Acessar GPT
                 </Button>
@@ -318,32 +293,32 @@ export function Dashboard() {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <div className="flex items-center justify-center space-x-3 mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-            <Brain className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-vega-cta rounded-xl flex items-center justify-center shadow-vega-cta">
+            <Brain className="w-6 h-6 text-vega-text" />
           </div>
-          <h2 className="text-3xl text-white">GPT - {selectedDisciplina}</h2>
+          <h2 className="text-3xl text-vega-text">GPT - {selectedDisciplina}</h2>
         </div>
-        <p className="text-blue-200">Seu assistente de estudos especializado</p>
+        <p className="text-vega-text-2">Seu assistente de estudos especializado</p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {gptFeatures.map((feature, index) => (
-          <Card key={index} className="bg-slate-900/50 border-blue-800/30">
+          <Card key={index} className="vega-card">
             <CardContent className="pt-6">
               <div className="flex items-center space-x-3 mb-3">
-                <feature.icon className="w-5 h-5 text-blue-400" />
-                <h3 className="text-white">{feature.label}</h3>
+                <feature.icon className="w-5 h-5 text-vega-neon" />
+                <h3 className="text-vega-text">{feature.label}</h3>
               </div>
-              <p className="text-blue-100 text-sm">{feature.description}</p>
+              <p className="text-vega-text-2 text-sm">{feature.description}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card className="bg-slate-900/50 border-blue-800/30">
+      <Card className="vega-card">
         <CardHeader>
-          <CardTitle className="text-white">Interface do Chat</CardTitle>
-          <CardDescription className="text-blue-200">
+          <CardTitle className="text-vega-text">Interface do Chat</CardTitle>
+          <CardDescription className="text-vega-text-2">
             Seu assistente especializado em {selectedDisciplina}
           </CardDescription>
         </CardHeader>
@@ -359,63 +334,47 @@ export function Dashboard() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center space-x-3 mb-4">
           <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-400 rounded-full flex items-center justify-center">
-              <div className="w-14 h-14 bg-gradient-to-br from-slate-900 to-blue-950 rounded-full flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-cyan-300" />
+            <div className="w-16 h-16 bg-vega-cta rounded-full flex items-center justify-center shadow-vega-cta">
+              <div className="w-14 h-14 bg-vega-bg rounded-full flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-vega-text" />
               </div>
             </div>
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-cyan-400 rounded-full animate-pulse" />
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-vega-neon rounded-full animate-pulse" />
           </div>
           <div>
-            <h2 className="text-3xl bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-              GPT Orientador Sirius
+            <h2 className="text-3xl text-vega-neon">
+              GPT Orientador Vega
             </h2>
-            <p className="text-blue-200">Criador de planos personalizados de estudo</p>
+            <p className="text-vega-text-2">Criador de planos personalizados de estudo</p>
           </div>
         </div>
       </div>
 
-      <Card className="bg-slate-900/50 border-cyan-800/30">
+      <Card className="vega-card">
         <CardHeader>
-          <CardTitle className="text-white">Interface do Orientador</CardTitle>
-          <CardDescription className="text-blue-200">
+          <CardTitle className="text-vega-text">Interface do Orientador</CardTitle>
+          <CardDescription className="text-vega-text-2">
             Configure seu plano de estudos personalizado para a Câmara dos Deputados
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SiriusOrientador />
+          <VegaOrientador />
         </CardContent>
       </Card>
     </div>
   );
 
-  const renderFerramentas = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center space-x-3 mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
-            <Wrench className="w-6 h-6 text-white" />
-          </div>
-          <h2 className="text-3xl text-white">Ferramentas de Estudo</h2>
-        </div>
-        <p className="text-purple-200">Recursos avançados para otimizar sua preparação</p>
-      </div>
-
-      <Ferramentas />
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-purple-950 cosmic-bg">
+    <div className="min-h-screen bg-vega-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {renderBreadcrumb()}
         
-        {currentView === 'concursos' && renderConcursos()}
-        {currentView === 'orientador' && renderOrientador()}
-        {currentView === 'cargos' && renderCargos()}
-        {currentView === 'disciplinas' && renderDisciplinas()}
-        {currentView === 'gpt' && renderGPT()}
-        {currentView === 'ferramentas' && renderFerramentas()}
+            {currentView === 'concursos' && renderConcursos()}
+            {currentView === 'orientador' && renderOrientador()}
+            {currentView === 'cargos' && renderCargos()}
+            {currentView === 'disciplinas' && renderDisciplinas()}
+            {currentView === 'gpt' && renderGPT()}
       </div>
     </div>
   );
