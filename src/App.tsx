@@ -18,6 +18,12 @@ function AppInner() {
     }
   }, [isAuthenticated, tela]);
 
+  // Função de logout que redireciona para home
+  const handleLogout = () => {
+    logout();
+    setTela("home");
+  };
+
   return (
     <ErrorBoundary fallback={null} children={
       <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-purple-950">
@@ -51,7 +57,7 @@ function AppInner() {
                   <div className="flex items-center gap-3">
                     <span className="text-blue-200 text-sm">{userEmail}</span>
                     <button 
-                      onClick={logout}
+                      onClick={handleLogout}
                       className="px-4 py-2 rounded-md border border-blue-400/50 text-blue-200 hover:bg-blue-900/50 transition-colors"
                     >
                       Sair
@@ -70,7 +76,7 @@ function AppInner() {
                 onLoginClick={() => setOpenLogin(true)}
                 isAuthenticated={isAuthenticated}
                 userEmail={userEmail}
-                onLogout={logout}
+                onLogout={handleLogout}
               />
             )}
             {tela === "dashboard" && <Dashboard />}
