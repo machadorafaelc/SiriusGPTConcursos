@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Lock, Mail, Rocket } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 import { useAuth } from "../AuthContext";
 
 export function LoginModal({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -26,69 +26,52 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md vega-card p-8 shadow-2xl">
+      <div className="w-full max-w-md bg-slate-900 border border-blue-800/30 rounded-lg p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full vega-cta flex items-center justify-center shadow-vega-cta">
-              <Rocket className="w-5 h-5 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-vega-text">Entrar no Sistema</h3>
+          <div className="flex items-center space-x-2">
+            <Sparkles className="w-5 h-5 text-blue-400" />
+            <h3 className="text-xl font-bold text-white">Acesse sua jornada</h3>
           </div>
           <button 
             onClick={onClose} 
-            className="text-vega-text-2 hover:text-vega-text transition-colors"
+            className="text-gray-400 hover:text-white transition-colors"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <p className="text-vega-text-2 mb-6">
-          Acesse o universo de possibilidades do Vega GPT Concursos
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
-          <div>
-            <label className="block text-sm font-medium text-vega-text mb-2">
-              Email
-            </label>
-            <div className="flex items-center gap-3 rounded-xl border border-vega-border bg-vega-bg/50 px-4 py-3 focus-within:border-vega-neon transition-colors">
-              <Mail className="w-5 h-5 text-vega-text-2" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-transparent text-vega-text outline-none placeholder:text-vega-text-2"
-                placeholder="seu@email.com"
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-white">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-slate-800 border border-blue-800/30 rounded-md px-3 py-2 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="seu@email.com"
+              required
+            />
           </div>
 
           {/* Password Input */}
-          <div>
-            <label className="block text-sm font-medium text-vega-text mb-2">
-              Senha
-            </label>
-            <div className="flex items-center gap-3 rounded-xl border border-vega-border bg-vega-bg/50 px-4 py-3 focus-within:border-vega-neon transition-colors">
-              <Lock className="w-5 h-5 text-vega-text-2" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-transparent text-vega-text outline-none placeholder:text-vega-text-2"
-                placeholder="••••••••"
-                required
-                minLength={4}
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-white">Senha</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-slate-800 border border-blue-800/30 rounded-md px-3 py-2 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="••••••••"
+              required
+              minLength={4}
+            />
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="rounded-xl bg-red-500/10 border border-red-500/30 p-3 text-red-400 text-sm flex items-center gap-2">
-              <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+            <div className="rounded-md bg-red-500/10 border border-red-500/30 p-3 text-red-400 text-sm">
               {error}
             </div>
           )}
@@ -96,32 +79,12 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full vega-btn flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 text-white px-4 py-2 rounded-md font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            {loading ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                Entrando...
-              </>
-            ) : (
-              <>
-                <Rocket className="w-5 h-5" />
-                Entrar no Sistema
-              </>
-            )}
+            {loading ? "Entrando..." : "Entrar na Plataforma"}
           </button>
         </form>
-
-        {/* Footer */}
-        <div className="mt-6 pt-6 border-t border-vega-border">
-          <p className="text-center text-sm text-vega-text-2">
-            Não tem uma conta?{" "}
-            <button className="text-vega-neon hover:underline font-medium">
-              Solicitar Acesso
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );
