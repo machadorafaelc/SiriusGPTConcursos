@@ -1,7 +1,9 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* =====================================================
-   VEGA GPT CONCURSOS — Tema Universo (versão corrigida)
+   VEGA GPT CONCURSOS — Tema Universo
    ===================================================== */
 
 :root {
@@ -15,121 +17,153 @@
   --vega-pink: #E4007C;
   --vega-border: rgba(255, 255, 255, 0.08);
   --vega-shadow: rgba(0, 0, 0, 0.6);
-
-  --vega-page-grad: linear-gradient(180deg, #0B0E23 0%, #1A1F4A 100%);
-  --vega-cta-grad: linear-gradient(90deg, #6E00FF 0%, #E4007C 100%);
 }
 
 /* Fundo global: o gradiente espacial é PRIORITÁRIO */
-html, body {
-  background: var(--vega-page-grad) !important;
-  color: var(--vega-text);
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+@layer base {
+  html, body {
+    background: linear-gradient(180deg, #0B0E23 0%, #1A1F4A 100%) !important;
+    color: var(--vega-text);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  * {
+    border-color: var(--vega-border);
+  }
 }
 
 /* ===================== COMPONENTES ===================== */
 
-.vega-card {
-  background: var(--vega-card);
-  color: var(--vega-text);
-  border: 1px solid var(--vega-border);
-  border-radius: 16px;
-  box-shadow: 0 0 20px var(--vega-shadow);
-}
+@layer components {
+  .vega-card {
+    background: var(--vega-card);
+    color: var(--vega-text);
+    border: 1px solid var(--vega-border);
+    border-radius: 16px;
+    box-shadow: 0 0 20px var(--vega-shadow);
+  }
 
-.vega-heading {
-  color: var(--vega-neon);
-}
+  .vega-heading {
+    color: var(--vega-neon);
+  }
 
-.vega-subtext {
-  color: var(--vega-text-2);
-}
+  .vega-subtext {
+    color: var(--vega-text-2);
+  }
 
-.vega-btn {
-  background: var(--vega-cta-grad);
-  color: #fff;
-  border-radius: 12px;
-  font-weight: 600;
-  box-shadow: 0 6px 16px rgba(110, 0, 255, 0.35);
-  transition: filter 0.2s ease, transform 0.05s ease;
-}
-.vega-btn:hover {
-  filter: brightness(1.15);
-}
-.vega-btn:active {
-  transform: translateY(1px);
+  .vega-btn {
+    background: linear-gradient(90deg, #6E00FF 0%, #E4007C 100%);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(110, 0, 255, 0.35);
+    transition: filter 0.2s ease, transform 0.05s ease;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .vega-btn:hover {
+    filter: brightness(1.15);
+  }
+  
+  .vega-btn:active {
+    transform: translateY(1px);
+  }
+
+  .vega-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--vega-text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid var(--vega-border);
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .vega-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .vega-page {
+    background: linear-gradient(180deg, #0B0E23 0%, #1A1F4A 100%);
+    min-height: 100vh;
+  }
+
+  .vega-cta {
+    background: linear-gradient(90deg, #6E00FF 0%, #E4007C 100%);
+  }
+
+  .shadow-vega-cta {
+    box-shadow: 0 6px 16px rgba(110, 0, 255, 0.35);
+  }
+
+  .shadow-vega {
+    box-shadow: 0 0 20px var(--vega-shadow);
+  }
 }
 
 /* ===================== ELEMENTOS TEMÁTICOS ===================== */
 
-/* Fundo cósmico com brilho e estrelas */
-.cosmic-bg {
-  background: radial-gradient(ellipse at top, rgba(59,130,246,0.15), transparent 50%),
-              radial-gradient(ellipse at bottom, rgba(168,85,247,0.1), transparent 50%),
-              var(--vega-page-grad);
-  background-blend-mode: screen;
-}
-
-/* Estrelas discretas */
-.stars-subtle {
-  background-image:
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, white, transparent),
-    radial-gradient(1px 1px at 50% 50%, white, transparent),
-    radial-gradient(1px 1px at 80% 10%, white, transparent),
-    radial-gradient(2px 2px at 90% 60%, white, transparent),
-    radial-gradient(1px 1px at 33% 80%, white, transparent);
-  background-size: 200% 200%;
-  opacity: 0.4;
-}
-
-/* Card translúcido tipo universo */
-.universe-card {
-  border-radius: 1rem;
-  backdrop-filter: blur(4px);
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-}
-.universe-card:hover {
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.2);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
-}
-
-/* Badge */
-.badge-traceable {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(168,85,247,0.2));
-  border: 1px solid rgba(99,102,241,0.3);
-  color: rgb(167,139,250);
-  font-size: 0.875rem;
-}
-
-/* Painel de citações */
-.citations-panel {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: rgba(30,41,59,0.4);
-  border: 1px solid rgba(99,102,241,0.2);
-}
-
-/* ===================== REMOÇÃO DE OVERRIDES NEUTROS ===================== */
-
-/* Impede que o Tailwind substitua as cores Vega */
-@layer base {
-  * {
-    @apply border-transparent;
+@layer utilities {
+  /* Fundo cósmico com brilho e estrelas */
+  .cosmic-bg {
+    background: radial-gradient(ellipse at top, rgba(59,130,246,0.15), transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(168,85,247,0.1), transparent 50%),
+                linear-gradient(180deg, #0B0E23 0%, #1A1F4A 100%);
+    background-blend-mode: screen;
   }
-  body {
-    background: var(--vega-page-grad) !important;
-    color: var(--vega-text) !important;
+
+  /* Estrelas discretas */
+  .stars-subtle {
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 33% 80%, white, transparent);
+    background-size: 200% 200%;
+    opacity: 0.4;
+  }
+
+  /* Card translúcido tipo universo */
+  .universe-card {
+    border-radius: 1rem;
+    backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+  
+  .universe-card:hover {
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+
+  /* Badge */
+  .badge-traceable {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(168,85,247,0.2));
+    border: 1px solid rgba(99,102,241,0.3);
+    color: rgb(167,139,250);
+    font-size: 0.875rem;
+  }
+
+  /* Painel de citações */
+  .citations-panel {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: rgba(30,41,59,0.4);
+    border: 1px solid rgba(99,102,241,0.2);
   }
 }

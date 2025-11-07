@@ -20,30 +20,44 @@ function AppInner() {
 
   return (
     <ErrorBoundary fallback={null} children={
-      <main className="min-h-screen bg-gradient-to-b from-[#0c0c1e] to-[#04040c] text-white">
+      <main className="min-h-screen vega-page">
         {/* Navigation para outras telas */}
         {tela !== "home" && (
-          <div className="p-6">
-            <div className="mb-6 flex gap-4 justify-between items-center">
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setTela("home")}
-                  className="rounded-lg bg-white/10 px-4 py-2 hover:bg-white/20"
-                >
-                  Home
-                </button>
-                <button
-                  onClick={() => setTela("dashboard")}
-                  className="rounded-lg bg-white/10 px-4 py-2 hover:bg-white/20"
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={() => setTela("orientador")}
-                  className="rounded-lg bg-emerald-600 px-4 py-2 hover:bg-emerald-700"
-                >
-                  Vega Orientador
-                </button>
+          <div className="p-6 bg-vega-bg/50 border-b border-vega-border">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex gap-4 justify-between items-center">
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setTela("home")}
+                    className="vega-btn-secondary"
+                  >
+                    Home
+                  </button>
+                  <button
+                    onClick={() => setTela("dashboard")}
+                    className="vega-btn-secondary"
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => setTela("orientador")}
+                    className="vega-btn"
+                  >
+                    Vega Orientador
+                  </button>
+                </div>
+                
+                {isAuthenticated && (
+                  <div className="flex items-center gap-3">
+                    <span className="text-vega-text-2 text-sm">{userEmail}</span>
+                    <button 
+                      onClick={logout}
+                      className="px-4 py-2 rounded-lg bg-red-600/20 text-red-400 border border-red-600/30 hover:bg-red-600/30 transition-colors"
+                    >
+                      Sair
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
