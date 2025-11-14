@@ -2,7 +2,7 @@ import { useState } from "react";
 import { gerarPlano } from "../services/gerarPlano";
 import { usePlano } from "../PlanoContext";
 import { useStudyPlan } from "../StudyPlanContext";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { VegaChat } from "./VegaChat";
 import { MessageSquare, Settings, Sparkles, CheckCircle } from "lucide-react";
 
