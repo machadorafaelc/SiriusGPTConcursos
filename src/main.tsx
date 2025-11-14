@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App";
 import "./index.css";
 import { PlanoProvider } from "./PlanoContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <PlanoProvider children={<App />} />
+    <AuthProvider>
+      <PlanoProvider children={<App />} />
+    </AuthProvider>
   </React.StrictMode>
 );
