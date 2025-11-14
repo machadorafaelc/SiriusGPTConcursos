@@ -3,14 +3,14 @@ import { Dashboard } from "./components/Dashboard";
 import { LandingPage } from "./components/LandingPage";
 import { VegaOrientador } from "./components/SiriusOrientador";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { AuthProvider, useAuth } from "./AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { StudyPlanProvider } from "./StudyPlanContext";
 import { LoginModal } from "./components/LoginModal";
 
 function AppInner() {
   const [tela, setTela] = useState("home" as "home" | "dashboard" | "orientador");
   const [openLogin, setOpenLogin] = useState(false);
-  const { isAuthenticated, userEmail, logout } = useAuth();
+  const { isAuthenticated, profile, signOut } = useAuth();
 
   // Redireciona para dashboard após login
   React.useEffect(() => {
@@ -20,8 +20,8 @@ function AppInner() {
   }, [isAuthenticated, tela]);
 
   // Função de logout que redireciona para home
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut();
     setTela("home");
   };
 
@@ -56,7 +56,7 @@ function AppInner() {
                 
                 {isAuthenticated && (
                   <div className="flex items-center gap-3">
-                    <span className="text-blue-200 text-sm">{userEmail}</span>
+                    <span className="text-blue-200 text-sm">{profile?.email}</span>
                     <button 
                       onClick={handleLogout}
                       className="px-4 py-2 rounded-md border border-blue-400/50 text-blue-200 hover:bg-blue-900/50 transition-colors"
@@ -76,7 +76,7 @@ function AppInner() {
               <LandingPage 
                 onLoginClick={() => setOpenLogin(true)}
                 isAuthenticated={isAuthenticated}
-                userEmail={userEmail}
+                userEmail={profile?.email || ''}
                 onLogout={handleLogout}
               />
             )}
