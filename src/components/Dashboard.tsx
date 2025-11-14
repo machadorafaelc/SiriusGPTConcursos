@@ -119,13 +119,17 @@ export function Dashboard() {
   };
 
   const renderBreadcrumb = () => (
-    <div className="flex items-center space-x-2 mb-6 text-sm">
+    <div className="flex items-center space-x-2 mb-6 text-base">
       {breadcrumb.map((item, index) => (
         <div key={index} className="flex items-center">
-          {index > 0 && <span className="text-vega-text-2 mx-2">/</span>}
+          {index > 0 && <span className="text-white/40 mx-2">/</span>}
           <button
             onClick={() => navigateBack(item.view)}
-            className="text-vega-neon hover:text-vega-text transition-colors"
+            className={`font-medium transition-all duration-200 ${
+              index === breadcrumb.length - 1
+                ? 'text-white cursor-default'
+                : 'text-vega-neon hover:text-white hover:underline cursor-pointer'
+            }`}
           >
             {item.label}
           </button>
