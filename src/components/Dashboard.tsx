@@ -66,9 +66,7 @@ export function Dashboard() {
   const gptFeatures: Array<{ icon: any; label: string; description: string }> = [
     { icon: MessageSquare, label: 'Chat Interativo', description: 'Tire dúvidas em tempo real' },
     { icon: FileText, label: 'Exercícios', description: 'Milhares de questões comentadas' },
-    { icon: BookOpen, label: 'Resumos', description: 'Construção automática de resumos' },
-    { icon: BarChart3, label: 'Progresso', description: 'Acompanhe sua evolução' },
-    { icon: ExternalLink, label: 'Links Diretos', description: 'Acesso a plataformas de questões' }
+    { icon: BookOpen, label: 'Resumos', description: 'Construção automática de resumos' }
   ];
 
   const navigateTo = (view: ViewType, data?: any) => {
