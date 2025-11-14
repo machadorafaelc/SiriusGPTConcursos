@@ -17,7 +17,7 @@ export function VegaOrientador() {
   >([]);
   const { setPlano } = usePlano();
   const { setStudyPlan } = useStudyPlan();
-  const { userEmail } = useAuth();
+  const { user, profile } = useAuth();
   const [planoSalvo, setPlanoSalvo] = useState(false);
 
   const opcoesDisciplinas = [
@@ -35,12 +35,27 @@ export function VegaOrientador() {
   }
 
   async function handleGerarPlano() {
+    // Validação
+    if (disciplinas.length === 0) {
+      alert('Por favor, selecione pelo menos uma disciplina!');
+      return;
+    }
+    
+    if (horas <= 0 || prazo <= 0) {
+      alert('Por favor, informe valores válidos para horas e prazo!');
+      return;
+    }
+    
+    console.log('Gerando plano com:', { horas, prazo, disciplinas, nivel });
+    
     const plano = await gerarPlano({
       horasSemanais: horas,
       prazoSemanas: prazo,
       disciplinas,
       nivel,
     });
+    
+    console.log('Plano gerado:', plano);
     setCronograma(plano.cronograma);
 
     // Organiza e salva o plano por disciplina no contexto global
@@ -56,8 +71,8 @@ export function VegaOrientador() {
     const disciplinaDaSemana = plano.cronograma.length > 0 ? plano.cronograma[0].foco : disciplinas[0] || "Não definida";
     
     setStudyPlan({
-      userName: userEmail?.split('@')[0] || "Estudante",
-      userEmail: userEmail || "",
+      userName: profile?.nome || user?.email?.split('@')[0] || "Estudante",
+      userEmail: user?.email || "",
       tempoEstudoDiario: horas / 7, // Converte horas semanais em diárias
       disciplinaDaSemana: disciplinaDaSemana,
       metodoEstudo: nivel === "iniciante" ? "Ciclo de estudos básico" : nivel === "intermediario" ? "Revisão espaçada" : "Resolução intensiva de questões",
@@ -75,7 +90,7 @@ export function VegaOrientador() {
   }
 
   return (
-    <div className="space-y-6 text-white">
+    <div className="space-y-6 text-white p-4">
       {/* Header com navegação */}
       <div className="flex items-center justify-between">
         <div>
