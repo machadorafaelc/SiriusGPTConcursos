@@ -117,9 +117,9 @@ export function RichMessage({ content, className = "" }: RichMessageProps) {
             {icons[type as keyof typeof icons] || icons.default}
           </span>
           <div className="flex-1">
-            <pre className="whitespace-pre-wrap text-white leading-relaxed font-sans">
+            <div className="whitespace-pre-wrap text-white leading-relaxed">
               {cleanContent}
-            </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -132,9 +132,9 @@ export function RichMessage({ content, className = "" }: RichMessageProps) {
     <div className={`space-y-2 ${className}`}>
       {blocks.length > 0 ? blocks : (
         <div className="p-4 bg-slate-800/20 rounded-lg">
-          <pre className="whitespace-pre-wrap text-white leading-relaxed">
+          <div className="whitespace-pre-wrap text-white leading-relaxed">
             {content}
-          </pre>
+          </div>
         </div>
       )}
     </div>
