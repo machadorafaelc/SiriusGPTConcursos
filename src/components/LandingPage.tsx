@@ -47,13 +47,6 @@ export function LandingPage({ onLoginClick, isAuthenticated, userEmail, onLogout
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-purple-950 overflow-hidden pt-24">
-        <div className="absolute inset-0">
-          <img
-            src="figma:asset/615da908da1190e89d265469d04ec183c76d51ba.png"
-            alt=""
-            className="w-full h-full object-cover opacity-40"
-          />
-        </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <div className="inline-flex items-center space-x-2 bg-blue-900/50 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -91,13 +84,6 @@ export function LandingPage({ onLoginClick, isAuthenticated, userEmail, onLogout
 
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-b from-slate-900 via-blue-950 to-purple-950 relative">
-        <div className="absolute inset-0 opacity-20">
-          <img
-            src="figma:asset/e0ddc240a8b4b42f367ea2e49a4fdf6cc506e2cf.png"
-            alt="Galaxy background"
-            className="w-full h-full object-cover"
-          />
-        </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-white">
