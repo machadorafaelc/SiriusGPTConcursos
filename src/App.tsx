@@ -10,7 +10,7 @@ import { LoginModal } from "./components/LoginModal";
 function AppInner() {
   const [tela, setTela] = useState("home" as "home" | "dashboard" | "orientador");
   const [openLogin, setOpenLogin] = useState(false);
-  const { isAuthenticated, profile, signOut } = useAuth();
+  const { isAuthenticated, profile, user, signOut } = useAuth();
 
   // Redireciona para dashboard após login (apenas na primeira vez)
   React.useEffect(() => {
