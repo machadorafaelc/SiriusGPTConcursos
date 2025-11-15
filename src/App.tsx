@@ -12,10 +12,10 @@ function AppInner() {
   const [openLogin, setOpenLogin] = useState(false);
   const { isAuthenticated, profile, signOut } = useAuth();
 
-  // Redireciona para dashboard após login
+  // Redireciona para dashboard após login (apenas na primeira vez)
   React.useEffect(() => {
     if (isAuthenticated && tela === "home") {
-      setTela("dashboard");
+      // Não redireciona automaticamente, deixa o usuário decidir
     }
   }, [isAuthenticated, tela]);
 
@@ -45,12 +45,6 @@ function AppInner() {
                     className="px-4 py-2 rounded-md bg-blue-900/50 text-blue-200 hover:bg-blue-900/70 transition-colors"
                   >
                     Dashboard
-                  </button>
-                  <button
-                    onClick={() => setTela("orientador")}
-                    className="px-4 py-2 rounded-md bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-white hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 transition-all"
-                  >
-                    Vega Orientador
                   </button>
                 </div>
                 
