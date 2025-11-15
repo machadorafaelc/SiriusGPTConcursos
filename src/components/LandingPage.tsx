@@ -50,7 +50,7 @@ export function LandingPage({ onLoginClick, isAuthenticated, userEmail, onLogout
         <div className="absolute inset-0">
           <img
             src="figma:asset/615da908da1190e89d265469d04ec183c76d51ba.png"
-            alt="Galaxy background"
+            alt=""
             className="w-full h-full object-cover opacity-40"
           />
         </div>
@@ -62,10 +62,10 @@ export function LandingPage({ onLoginClick, isAuthenticated, userEmail, onLogout
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-300 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Um Universo de
+              O Universo da
               <br />
               <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                Possibilidades
+                Sua Aprovação
               </span>
             </h1>
             

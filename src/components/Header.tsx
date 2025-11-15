@@ -26,8 +26,8 @@ export function Header({ onLoginClick, isAuthenticated, userEmail, onLogout }: H
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Sirius GPT Concursos</h1>
-              <p className="text-xs text-blue-200">Um universo de possibilidades</p>
+              <h1 className="text-xl font-bold text-white">Vega GPT Concursos</h1>
+              <p className="text-xs text-blue-200">O universo da sua aprovação</p>
             </div>
           </div>
 
