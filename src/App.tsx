@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Dashboard } from "./components/Dashboard";
 import { LandingPage } from "./components/LandingPage";
 import { VegaOrientador } from "./components/SiriusOrientador";
+import { AdminPanel } from "./components/AdminPanel";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { StudyPlanProvider } from "./StudyPlanContext";
 import { LoginModal } from "./components/LoginModal";
 
 function AppInner() {
-  const [tela, setTela] = useState("home" as "home" | "dashboard" | "orientador");
+  const [tela, setTela] = useState("home" as "home" | "dashboard" | "orientador" | "admin");
   const [openLogin, setOpenLogin] = useState(false);
   const { isAuthenticated, profile, user, signOut } = useAuth();
 
@@ -46,6 +47,14 @@ function AppInner() {
                   >
                     Dashboard
                   </button>
+                  {profile?.role === 'super_admin' && (
+                    <button
+                      onClick={() => setTela("admin")}
+                      className="px-4 py-2 rounded-md bg-red-900/50 text-red-200 hover:bg-red-900/70 transition-colors border border-red-500/30"
+                    >
+                      Admin
+                    </button>
+                  )}
                 </div>
                 
                 {isAuthenticated && (
@@ -76,6 +85,7 @@ function AppInner() {
             )}
             {tela === "dashboard" && <Dashboard />}
             {tela === "orientador" && <VegaOrientador />}
+            {tela === "admin" && profile?.role === 'super_admin' && <AdminPanel />}
           </>
         } />
         <LoginModal open={openLogin} onClose={() => setOpenLogin(false)} />
