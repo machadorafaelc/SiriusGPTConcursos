@@ -70,7 +70,7 @@ function AppInner() {
               <LandingPage 
                 onLoginClick={() => setOpenLogin(true)}
                 isAuthenticated={isAuthenticated}
-                userEmail={profile?.email || ''}
+                userEmail={profile?.email || user?.email || ''}
                 onLogout={handleLogout}
               />
             )}

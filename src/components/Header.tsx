@@ -9,6 +9,8 @@ interface HeaderProps {
 }
 
 export function Header({ onLoginClick, isAuthenticated, userEmail, onLogout }: HeaderProps) {
+  // Se não tem email, não está realmente autenticado
+  const reallyAuthenticated = isAuthenticated && userEmail;
   return (
     <header className="bg-gradient-to-r from-slate-900 via-blue-950 to-purple-950 border-b border-blue-800/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +32,7 @@ export function Header({ onLoginClick, isAuthenticated, userEmail, onLogout }: H
           </div>
 
           {/* Botão Login - Lado Direito */}
-          {isAuthenticated ? (
+          {reallyAuthenticated ? (
             <div className="flex items-center space-x-4">
               <span className="text-blue-200">Bem-vindo, {userEmail}!</span>
               <button 
