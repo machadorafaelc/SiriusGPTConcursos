@@ -64,9 +64,7 @@ Contexto do estudante:
     setLoading(false);
   
     // Adicionar resposta do assistente ao histórico
-    const assistantMessage = !r.citations || r.citations.length === 0 
-      ? "🚫 Resposta bloqueada por falta de fontes rastreáveis."
-      : r.answer;
+    const assistantMessage = r.answer;
     
     setHistory(prev => [...prev, { 
       role: "assistant", 
@@ -193,10 +191,8 @@ Contexto do estudante:
                 }`}
               >
                 {message.role === "user" ? (
-                  <div className="text-vega-text">
-                    <pre className="whitespace-pre-wrap leading-relaxed">
-                      {message.content}
-                    </pre>
+                  <div className="text-vega-text whitespace-pre-wrap leading-relaxed">
+                    {message.content}
                   </div>
                 ) : (
                   <RichMessage content={message.content} />
