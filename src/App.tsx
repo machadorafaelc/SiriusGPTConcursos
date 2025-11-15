@@ -12,10 +12,10 @@ function AppInner() {
   const [openLogin, setOpenLogin] = useState(false);
   const { isAuthenticated, profile, user, signOut } = useAuth();
 
-  // Redireciona para dashboard após login (apenas na primeira vez)
+  // Redireciona para dashboard após login
   React.useEffect(() => {
     if (isAuthenticated && tela === "home") {
-      // Não redireciona automaticamente, deixa o usuário decidir
+      setTela("dashboard");
     }
   }, [isAuthenticated, tela]);
 
