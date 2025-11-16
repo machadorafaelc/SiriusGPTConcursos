@@ -119,7 +119,6 @@ function generateCitations(agentId: AgentId, tema: string): Citation[] {
 }
 
 function generateMockResponse(params: any, agent: any): ChatResponse {
-  const tema = params.assunto || params.message || "Direito Administrativo";
   const mensagem = params.message?.toLowerCase() || "";
   
   // Verificar se é uma saudação simples
@@ -139,47 +138,23 @@ Sobre o que você gostaria de estudar hoje? Posso explicar conceitos, resolver q
     };
   }
 
-  // Para perguntas específicas, usar a estrutura completa
-  const answer = [
-    `**1. Contexto (concurso/banca):** ${params.concurso || "Policial Legislativo Federal - Câmara dos Deputados"} / ${params.banca || "CESPE"}`,
-    ``,
-    `**2. Resumo estruturado:**`,
-    `O Direito Administrativo é o ramo do direito público que regula a atividade administrativa do Estado. Compreende os princípios, normas e institutos que disciplinam a atuação da Administração Pública, seus agentes e a relação com os administrados.`,
-    ``,
-    `**3. Exemplo prático:**`,
-    `Questão CESPE (2023): "O poder de polícia é discricionário quanto à conveniência e oportunidade, mas vinculado quanto à competência e forma."`,
-    `Resposta: CORRETO. O poder de polícia admite discricionariedade na escolha do momento e modo de exercício, mas está vinculado aos limites legais de competência e forma.`,
-    ``,
-    `**4. Mapa mental:**`,
-    `• Princípios da Administração Pública`,
-    `  - Legalidade`,
-    `  - Impessoalidade`,
-    `  - Moralidade`,
-    `  - Publicidade`,
-    `  - Eficiência`,
-    `• Poderes Administrativos`,
-    `  - Hierárquico`,
-    `  - Disciplinar`,
-    `  - Regulamentar`,
-    `  - De Polícia`,
-    ``,
-    `**5. Checklist de memorização:**`,
-    `✓ Princípios constitucionais (art. 37, CF)`,
-    `✓ Poderes administrativos e seus atributos`,
-    `✓ Atos administrativos: elementos e atributos`,
-    `✓ Processo administrativo (Lei 9.784/99)`,
-    `✓ Licitações e contratos (Lei 14.133/21)`,
-    ``,
-    `**6. Fontes e referências:**`,
-    `- Consulte a legislação específica do tema`,
-    `- Doutrina especializada em Direito Administrativo`,
-    `- Jurisprudência do STF e STJ`,
-    ``,
-    `👉 Posso te ajudar com mais alguma dúvida sobre Direito Administrativo?`
-  ].join("\n");
+  // Para outras mensagens, mostrar erro claro
+  const answer = `⚠️ Desculpe, estou com dificuldades para processar sua pergunta no momento.
+
+Isso pode acontecer por:
+- Problema temporário na conexão com a API
+- Limite de tokens excedido
+- Timeout na requisição
+
+Por favor, tente:
+1. Reformular sua pergunta de forma mais simples
+2. Dividir em perguntas menores
+3. Aguardar alguns segundos e tentar novamente
+
+👉 Posso te ajudar com mais alguma dúvida sobre Direito Administrativo?`;
 
   return {
     answer,
-    citations: generateCitations(params.agentId, tema)
+    citations: []
   };
 }

@@ -76,6 +76,11 @@ export class OpenAIService {
 
     try {
       console.log("🌐 Fazendo requisição direta para OpenAI API...");
+      
+      // Criar AbortController para timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 segundos
+      
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -83,7 +88,10 @@ export class OpenAIService {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(config),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       console.log("📡 Resposta recebida, status:", response.status);
 
@@ -106,8 +114,14 @@ export class OpenAIService {
       }
 
       throw new Error("Resposta inválida da OpenAI API");
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Erro ao chamar OpenAI API:", error);
+      
+      // Tratamento especial para timeout
+      if (error.name === 'AbortError') {
+        throw new Error('Timeout: A requisição demorou mais de 60 segundos. Tente uma pergunta mais simples.');
+      }
+      
       throw error;
     }
   }
