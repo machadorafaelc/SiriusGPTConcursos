@@ -3,6 +3,7 @@ import { agentes } from "../agents";
 import { buscarConhecimento } from "../data/direitoAdministrativo";
 import { openaiService, type OpenAIMessage } from "./openaiService";
 import { agentCommunicationService } from "./agentCommunication";
+import { MultiAgentSystem } from "./multiAgent";
 
 type Citation = { title: string; url: string };
 type ChatResponse = { answer: string; citations: Citation[] };
@@ -19,41 +20,43 @@ export async function chatRag(params: {
   const agent = agentes[params.agentId];
 
   try {
-    console.log("🚀 Iniciando chamada para OpenAI...");
+    console.log("🚀 Iniciando Sistema Multi-Agente...");
     console.log("Agent ID:", params.agentId);
     console.log("Message:", params.message);
     console.log("Agent encontrado:", agent);
     console.log("Histórico recebido:", params.history?.length || 0, "mensagens");
     
-    // Verificar se há plano compartilhado do Sirius Orientador
+    // Verificar se há plano compartilhado do Vega Orientador
     const planoCompartilhado = agentCommunicationService.getPlanoCompartilhado('default', agent.disciplina);
     console.log("📋 Plano compartilhado encontrado:", planoCompartilhado);
     
-    // Usar OpenAI para gerar resposta
-    const systemPrompt = agent.systemPrompt({
-      concurso: params.concurso,
-      banca: params.banca,
-      assunto: params.assunto || params.message,
-      planoCompartilhado: planoCompartilhado
-    });
-
-    console.log("System prompt length:", systemPrompt.length);
-    console.log("System prompt preview:", systemPrompt.substring(0, 200) + "...");
-
-    console.log("📞 Chamando openaiService.chatWithAgent...");
-    const answer = await openaiService.chatWithAgent(
-      systemPrompt,
-      params.message,
-      params.history || []
-    );
-
-    console.log("✅ Resposta recebida da OpenAI:", answer.substring(0, 100) + "...");
-    console.log("Resposta completa length:", answer.length);
+    // Usar Sistema Multi-Agente
+    const multiAgentSystem = new MultiAgentSystem();
+    
+    const multiAgentRequest = {
+      userMessage: params.message,
+      context: {
+        concurso: params.concurso || "Policial Legislativo Federal - Câmara dos Deputados",
+        banca: params.banca || "CESPE/CEBRASPE",
+        disciplina: params.disciplina || agent.disciplina,
+        assunto: params.assunto || params.message
+      },
+      history: (params.history || []).map(h => ({
+        role: h.role as 'user' | 'assistant',
+        content: h.content
+      }))
+    };
+    
+    console.log("🤖 Processando com Sistema Multi-Agente...");
+    const multiAgentResponse = await multiAgentSystem.processMessage(multiAgentRequest);
+    
+    console.log("✅ Resposta do Sistema Multi-Agente:", multiAgentResponse.finalAnswer.substring(0, 100) + "...");
+    console.log("🤖 Agentes usados:", multiAgentResponse.agentsUsed);
 
     // Gerar citações baseadas no agente
     const citations: Citation[] = generateCitations(params.agentId, params.assunto || params.message);
 
-    return { answer, citations };
+    return { answer: multiAgentResponse.finalAnswer, citations };
   } catch (error) {
     console.error("❌ Erro ao chamar OpenAI:", error);
     console.error("Detalhes do erro:", error);
